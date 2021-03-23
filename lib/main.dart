@@ -21,11 +21,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     globalService();
-    getPackageName();
+    getTimer();
   }
 
   String globalPackageName;
-  static const platform = const MethodChannel("settingsdetector");
+  static const platform = const MethodChannel("appdetector");
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -59,9 +59,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   getTimer() {
-    Timer(Duration(seconds: 3), () {
+    return Timer(Duration(seconds: 3), () {
       getPackageName();
-      if (globalPackageName == '') {
+      if (globalPackageName == 'com.android.settings') {
         Fluttertoast.showToast(msg: "You're entering settings");
       }
       getTimer();
