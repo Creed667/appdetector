@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:appdetector/context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,6 +18,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    getUsagePermission();
     globalService();
     getTimer();
   }
@@ -35,6 +34,14 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  Future<void> getUsagePermission() async {
+    try {
+      await platform.invokeMethod("getUsagePermission");
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
   Future<void> globalService() async {

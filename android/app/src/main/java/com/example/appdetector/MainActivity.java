@@ -42,15 +42,20 @@ public class MainActivity extends FlutterActivity {
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .setMethodCallHandler(
                         (call, result) -> {
-                            if (call.method.equals("globalservice")) {
-                                GlobalMethods.startService(this, CreedsService.class);
-                                GlobalMethods.startAlarmManager(this);
-                                GlobalMethods.ignoreBatteryOptimization(MainActivity.this, 123);
-                                if (!GlobalMethods.isUsagedStatPermissionAccepted(this)) {
-                                    GlobalMethods.getUsageAccess(this, 234);
+                            if(call.method.equals("getUsagePermission")){
+                                if(!GlobalMethods.isUsagedStatPermissionAccepted(this)){
+                                    GlobalMethods.ignoreBatteryOptimization(MainActivity.this, 123);
+                                    GlobalMethods.getUsageAccess(this,234);
+
                                 }
                             }
-                            if (call.method.equals("packageName")) {
+                            else if (call.method.equals("globalservice")) {
+                                GlobalMethods.startService(this, CreedsService.class);
+                                GlobalMethods.startAlarmManager(this);
+
+                            }
+
+                            else if (call.method.equals("packageName")) {
                                 result.success(GlobalVariables.packageNames);
                             }
                         }
@@ -65,6 +70,7 @@ public class MainActivity extends FlutterActivity {
 
         if (requestCode == 123) {
             if (!GlobalMethods.isIgnoreBatteryOptEnabled(this)) {
+                GlobalMethods.ignoreBatteryOptimization(MainActivity.this, 123);
                 // If not, get permission again
                 // Dart needed
             }
@@ -73,7 +79,9 @@ public class MainActivity extends FlutterActivity {
         if (requestCode == 234) {
             if (!GlobalMethods.isUsagedStatPermissionAccepted(this)) {
                 // If not, get permission again
+                GlobalMethods.getUsageAccess(this,234);
                 // Dart needed
+
             }
         }
     }
