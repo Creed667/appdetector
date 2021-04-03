@@ -24,6 +24,7 @@ import java.util.List;
 
 public class GlobalMethods {
     private static final int period = 15 * 1000; //15 minutes;
+    private static Intent serviceIntent;
 
     public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -40,14 +41,19 @@ public class GlobalMethods {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundServices(context, serviceClass);
             } else {
-                context.startService(new Intent(context, serviceClass));
+                serviceIntent = new Intent(context, serviceClass);
+                context.startService(serviceIntent);
             }
         }
     }
 
-    public void stopService(Context context, Class<?> serviceClass) {
-        if (isServiceRunning(context, serviceClass))
-            context.stopService(new Intent(context, serviceClass));
+    public static void stopService(Context context, Class<?> serviceClass) {
+        if (isServiceRunning(context, serviceClass)) {
+            if (serviceIntent == null) {
+                serviceIntent = new Intent(context, serviceClass);
+            }
+            context.stopService(serviceIntent);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

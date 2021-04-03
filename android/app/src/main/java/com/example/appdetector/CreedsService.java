@@ -43,7 +43,7 @@ public class CreedsService extends Service {
         checkAppOpensForever();
 
         //
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     private void checkAppOpensForever() {

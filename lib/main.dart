@@ -1,9 +1,27 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterBackgroundService.initialize(() {
+    print("Started");
+  });
+  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  //     FlutterLocalNotificationsPlugin();
+  // const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  //     AndroidNotificationDetails(
+  //         'your channel id', 'RichIT', 'your channel description',
+  //         importance: Importance.max, priority: Priority.high, showWhen: false);
+  // const NotificationDetails platformChannelSpecifics =
+  //     NotificationDetails(android: androidPlatformChannelSpecifics);
+  // await flutterLocalNotificationsPlugin.show(
+  //     0, 'plain title', 'plain body', platformChannelSpecifics,
+  //     payload: 'item x');
+
   runApp(MyApp());
 }
 
@@ -15,9 +33,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  FlutterLocalNotificationsPlugin fltNotification;
+
   @override
   void initState() {
     super.initState();
+    var androidInitialize = new AndroidInitializationSettings(defaultIcon);
     getUsagePermission();
     globalService();
     getTimer();
@@ -66,11 +87,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   getTimer() {
-    return Timer(Duration(seconds: 3), () {
-      getPackageName();
+    return Timer(Duration(seconds: 1), () {
       if (globalPackageName == 'com.android.settings') {
         Fluttertoast.showToast(msg: "You're entering settings");
       }
+      getPackageName();
+
       getTimer();
     });
   }
