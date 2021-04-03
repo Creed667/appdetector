@@ -50,10 +50,10 @@ public class MainActivity extends FlutterActivity {
                                 }
                             }
                             else if (call.method.equals("globalservice")) {
-                                GlobalMethods.startService(this, CreedsService.class);
-                                GlobalMethods.startAlarmManager(this);
 
-                            }
+                            }GlobalMethods.startService(this, CreedsService.class);
+                            GlobalMethods.startAlarmManager(this);
+                            FayazNotifier.sendNoti("App running", "blah blah", this);
 
                             else if (call.method.equals("packageName")) {
                                 result.success(GlobalVariables.packageNames);
