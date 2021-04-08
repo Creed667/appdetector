@@ -3,6 +3,7 @@ package com.example.appdetector;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,21 +43,19 @@ public class MainActivity extends FlutterActivity {
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .setMethodCallHandler(
                         (call, result) -> {
-                            if(call.method.equals("getUsagePermission")){
-                                if(!GlobalMethods.isUsagedStatPermissionAccepted(this)){
+                            if (call.method.equals("getUsagePermission")) {
+                                if (!GlobalMethods.isUsagedStatPermissionAccepted(this)) {
                                     GlobalMethods.ignoreBatteryOptimization(MainActivity.this, 123);
-                                    GlobalMethods.getUsageAccess(this,234);
+                                    GlobalMethods.getUsageAccess(this, 234);
 
                                 }
-                            }
-                            else if (call.method.equals("globalservice")) {
-
-                            }GlobalMethods.startService(this, CreedsService.class);
-                            GlobalMethods.startAlarmManager(this);
-                            FayazNotifier.sendNoti("App running", "blah blah", this);
-
-                            else if (call.method.equals("packageName")) {
+                            } else if (call.method.equals("globalservice")) {
+                                GlobalMethods.startService(this, CreedsService.class);
+                                GlobalMethods.startAlarmManager(this);
+                                FayazNotifier.sendNoti("App running", "blah blah", this);
+                            } else if (call.method.equals("packageName")) {
                                 result.success(GlobalVariables.packageNames);
+                                Toast.makeText(this, "" + GlobalVariables.packageNames, Toast.LENGTH_SHORT).show();
                             }
                         }
                 );
@@ -79,7 +78,7 @@ public class MainActivity extends FlutterActivity {
         if (requestCode == 234) {
             if (!GlobalMethods.isUsagedStatPermissionAccepted(this)) {
                 // If not, get permission again
-                GlobalMethods.getUsageAccess(this,234);
+                GlobalMethods.getUsageAccess(this, 234);
                 // Dart needed
 
             }

@@ -7,10 +7,12 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import java.util.List;
@@ -83,6 +85,7 @@ public class CreedsService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+
         Intent restartServiceTask = new Intent(getApplicationContext(), this.getClass());
         restartServiceTask.setPackage(getPackageName());
         PendingIntent restartPendingIntent = PendingIntent.getService(getApplicationContext(), 1495, restartServiceTask, PendingIntent.FLAG_ONE_SHOT);

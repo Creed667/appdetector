@@ -5,6 +5,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(MyApp());
+
+  WidgetsBinding.instance
+      .addObserver(LifecycleEventHandler(detachedCallBack: () {
+    print("Detached");
+  }, resumeCallBack: () {
+    print("Resumed");
+  }));
 }
 
 class MyApp extends StatefulWidget {
@@ -69,9 +76,49 @@ class _MyAppState extends State<MyApp> {
     return Timer(Duration(seconds: 3), () {
       getPackageName();
       if (globalPackageName == 'com.android.settings') {
+        print("Settings");
         Fluttertoast.showToast(msg: "You're entering settings");
       }
       getTimer();
     });
   }
+}
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  LifecycleEventHandler({this.resumeCallBack, this.detachedCallBack});
+
+  var resumeCallBack;
+  var detachedCallBack;
+
+//  @override
+//  Future<bool> didPopRoute()
+
+//  @override
+//  void didHaveMemoryPressure()
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        await detachedCallBack();
+        break;
+      case AppLifecycleState.resumed:
+        await resumeCallBack();
+        break;
+    }
+  }
+
+//  @override
+//  void didChangeLocale(Locale locale)
+
+//  @override
+//  void didChangeTextScaleFactor()
+
+//  @override
+//  void didChangeMetrics();
+
+//  @override
+//  Future<bool> didPushRoute(String route)
 }
